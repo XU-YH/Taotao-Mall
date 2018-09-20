@@ -5,18 +5,25 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.abel533.mapper.Mapper;
 import com.taotao.manage.mapper.ItemCatMapper;
 import com.taotao.manage.pojo.ItemCat;
 
 @Service
-public class ItemCatService {
-	@Autowired
-	private ItemCatMapper itemCatMapper;
+public class ItemCatService extends BaseService<ItemCat> {
 
-	public List<ItemCat> queryItemCatListByParentId(long pid) {
-		ItemCat record = new ItemCat();
-		record.setParentId(pid);
-		return this.itemCatMapper.select(record);
-	}
+	// @Autowired
+	// private ItemCatMapper itemCatMapper;
+	//
+	// @Override
+	// public Mapper<ItemCat> getMapper() {
+	// return this.itemCatMapper;
+	// }
+
+	// public List<ItemCat> queryItemCatListByParentId(long pid) {
+	// ItemCat record = new ItemCat();
+	// record.setParentId(pid);
+	// return this.itemCatMapper.select(record);
+	// }
 
 }
