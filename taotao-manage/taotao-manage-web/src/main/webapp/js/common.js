@@ -1,12 +1,12 @@
 Date.prototype.format = function(format){ 
     var o =  { 
-    "M+" : this.getMonth()+1, //month 
-    "d+" : this.getDate(), //day 
-    "h+" : this.getHours(), //hour 
-    "m+" : this.getMinutes(), //minute 
-    "s+" : this.getSeconds(), //second 
-    "q+" : Math.floor((this.getMonth()+3)/3), //quarter 
-    "S" : this.getMilliseconds() //millisecond 
+    "M+" : this.getMonth()+1, // month
+    "d+" : this.getDate(), // day
+    "h+" : this.getHours(), // hour
+    "m+" : this.getMinutes(), // minute
+    "s+" : this.getSeconds(), // second
+    "q+" : Math.floor((this.getMonth()+3)/3), // quarter
+    "S" : this.getMilliseconds() // millisecond
     };
     if(/(y+)/.test(format)){ 
     	format = format.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
@@ -40,7 +40,7 @@ var TT = TAOTAO = {
 	},
 	// 格式化价格
 	formatPrice : function(val,row){
-		return (val/1000).toFixed(2);
+		return (val/100).toFixed(2);
 	},
 	// 格式化商品的状态
 	formatItemStatus : function formatStatus(val,row){
@@ -145,22 +145,15 @@ var TT = TAOTAO = {
     },
     
     /**
-     * 创建一个窗口，关闭窗口后销毁该窗口对象。<br/>
-     * 
-     * 默认：<br/>
-     * width : 80% <br/>
-     * height : 80% <br/>
-     * title : (空字符串) <br/>
-     * 
-     * 参数：<br/>
-     * width : <br/>
-     * height : <br/>
-     * title : <br/>
-     * url : 必填参数 <br/>
-     * onLoad : function 加载完窗口内容后执行<br/>
-     * 
-     * 
-     */
+	 * 创建一个窗口，关闭窗口后销毁该窗口对象。<br/>
+	 * 
+	 * 默认：<br/> width : 80% <br/> height : 80% <br/> title : (空字符串) <br/>
+	 * 
+	 * 参数：<br/> width : <br/> height : <br/> title : <br/> url : 必填参数 <br/>
+	 * onLoad : function 加载完窗口内容后执行<br/>
+	 * 
+	 * 
+	 */
     createWindow : function(params){
     	$("<div>").css({padding:"5px"}).window({
     		width : params.width?params.width:"80%",
@@ -183,31 +176,39 @@ var TT = TAOTAO = {
     	$(".panel-tool-close").click();
     },
     
-    changeItemParam : function(node,formId){
-    	$.getJSON("/rest/item/param/query/itemcatid/" + node.id,function(data){
-			  if(data.status == 200 && data.data){
-				 $("#"+formId+" .params").show();
-				 var paramData = JSON.parse(data.data.paramData);
-				 var html = "<ul>";
-				 for(var i in paramData){
-					 var pd = paramData[i];
-					 html+="<li><table>";
-					 html+="<tr><td colspan=\"2\" class=\"group\">"+pd.group+"</td></tr>";
-					 
-					 for(var j in pd.params){
-						 var ps = pd.params[j];
-						 html+="<tr><td class=\"param\"><span>"+ps+"</span>: </td><td><input autocomplete=\"off\" type=\"text\"/></td></tr>";
-					 }
-					 
-					 html+="</li></table>";
-				 }
-				 html+= "</ul>";
-				 $("#"+formId+" .params td").eq(1).html(html);
-			  }else{
-				 $("#"+formId+" .params").hide();
-				 $("#"+formId+" .params td").eq(1).empty();
-			  }
-		  });
+    changeItemParam : function(node,formId){    	
+    	$.ajax({
+			   type: "GET",
+			   url: "/rest/item/param/" + node.id,
+			   statusCode:{
+				   200 : function(data){
+					   $("#"+formId+" .params").show();
+					   	 var paramData = JSON.parse(data.paramData);
+						 var html = "<ul>";
+						 for(var i in paramData){
+							 var pd = paramData[i];
+							 html+="<li><table>";
+							 html+="<tr><td colspan=\"2\" class=\"group\">"+pd.group+"</td></tr>";
+							 
+							 for(var j in pd.params){
+								 var ps = pd.params[j];
+								 html+="<tr><td class=\"param\"><span>"+ps+"</span>: </td><td><input autocomplete=\"off\" type=\"text\"/></td></tr>";
+							 }
+							 
+							 html+="</li></table>";
+						 }
+						 html+= "</ul>";
+						 $("#"+formId+" .params td").eq(1).html(html);
+				   },
+				   404 : function(){
+					   $("#"+formId+" .params").hide();
+					   $("#"+formId+" .params td").eq(1).empty();
+				   },
+				   500 : function(){
+					   alert("error");
+				   }
+			   }				  
+			});
     },
     getSelectionsIds : function (select){
     	var list = $(select);
@@ -221,10 +222,8 @@ var TT = TAOTAO = {
     },
     
     /**
-     * 初始化单图片上传组件 <br/>
-     * 选择器为：.onePicUpload <br/>
-     * 上传完成后会设置input内容以及在input后面追加<img> 
-     */
+	 * 初始化单图片上传组件 <br/> 选择器为：.onePicUpload <br/> 上传完成后会设置input内容以及在input后面追加<img>
+	 */
     initOnePicUpload : function(){
     	$(".onePicUpload").click(function(){
 			var _self = $(this);
