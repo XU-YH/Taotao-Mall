@@ -12,8 +12,8 @@
 
 * **Spring**、**SpringMVC**、**MyBatis**
 * **JSP**、**JSTL**、**jQuery**、**jQuery plugin**、**EasyUI**、KindEditor(富文本编辑器)、**CSS+DIV**
+* **Mysql**
 * Redis(缓存服务器)
 * Lucene、Solr(搜索)
 * httpclient(调用系统服务)
-* **Mysql**
 * Nginx(web服务器)
