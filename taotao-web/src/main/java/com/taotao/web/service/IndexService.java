@@ -2,6 +2,7 @@ package com.taotao.web.service;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.taotao.common.bean.EasyUIResult;
+import com.taotao.manage.pojo.Content;
 
 @Service
 public class IndexService {
@@ -61,6 +64,37 @@ public class IndexService {
 		return null;
 	}
 
+//	public String queryIndexAD2() {
+//		try {
+//			String url = TAOTAO_MANAGE_URL + INDEX_AD2_URL;
+//			String jsonData = this.apiService.doGet(url);
+//			if (StringUtils.isEmpty(jsonData)) {
+//				return null;
+//			}
+//
+//			// 解析json数据，封装成前端所需要的结构
+//			JsonNode jsonNode = MAPPER.readTree(jsonData);
+//			ArrayNode rows = (ArrayNode) jsonNode.get("rows");
+//			ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+//			for (JsonNode row : rows) {
+//				Map<String, Object> map = new LinkedHashMap<String, Object>();
+//				map.put("width", 310);
+//				map.put("height", 70);
+//				map.put("src", row.get("pic").asText());
+//				map.put("href", row.get("url").asText());
+//				map.put("alt", row.get("title").asText());
+//				map.put("widthB", 210);
+//				map.put("heightB", 70);
+//				map.put("srcB", row.get("pic").asText());
+//				result.add(map);
+//			}
+//			return MAPPER.writeValueAsString(result);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
+	
 	public String queryIndexAD2() {
 		try {
 			String url = TAOTAO_MANAGE_URL + INDEX_AD2_URL;
@@ -70,19 +104,19 @@ public class IndexService {
 			}
 
 			// 解析json数据，封装成前端所需要的结构
-			JsonNode jsonNode = MAPPER.readTree(jsonData);
-			ArrayNode rows = (ArrayNode) jsonNode.get("rows");
+			EasyUIResult easyUIResult = EasyUIResult.formatToList(jsonData, Content.class);
+			List<Content> contents = (List<Content>) easyUIResult.getRows();
 			ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-			for (JsonNode row : rows) {
+			for (Content content : contents) {
 				Map<String, Object> map = new LinkedHashMap<String, Object>();
 				map.put("width", 310);
 				map.put("height", 70);
-				map.put("src", row.get("pic").asText());
-				map.put("href", row.get("url").asText());
-				map.put("alt", row.get("title").asText());
+				map.put("src", content.getPic());
+				map.put("href", content.getUrl());
+				map.put("alt", content.getTitle());
 				map.put("widthB", 210);
 				map.put("heightB", 70);
-				map.put("srcB", row.get("pic").asText());
+				map.put("srcB", content.getPic());
 				result.add(map);
 			}
 			return MAPPER.writeValueAsString(result);
