@@ -3,12 +3,14 @@ package com.taotao.manage.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.github.abel533.entity.Example;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.taotao.common.bean.EasyUIResult;
+import com.taotao.common.service.ApiService;
 import com.taotao.manage.mapper.ItemMapper;
 import com.taotao.manage.pojo.Item;
 import com.taotao.manage.pojo.ItemDesc;
@@ -25,6 +27,12 @@ public class ItemService extends BaseService<Item> {
 
 	@Autowired
 	private ItemMapper itemMapper;
+
+	@Autowired
+	private ApiService apiService;
+
+	@Value("${TAOTAO_WEB_URL}")
+	private String TAOTAO_WEB_URL;
 
 	public Boolean saveItem(Item item, String desc, String itemParams) {
 		// 设置初始值
@@ -73,6 +81,14 @@ public class ItemService extends BaseService<Item> {
 
 		// 更新规格参数
 		Integer count3 = this.itemParamItemService.updateItemParamItemById(item.getId(), itemParams);
+
+		// 通知其他系统该商品已经更新
+		try {
+			String url = TAOTAO_WEB_URL + "/item/cache/" + item.getId() + ".html";
+			this.apiService.doPost(url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return count1 == 1 && count2 == 1 && count3 == 1;
 	}

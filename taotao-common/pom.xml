@@ -12,6 +12,15 @@
 	<version>1.0.0-SNAPSHOT</version>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+		<!-- httpclient -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
 		<!-- Jackson Json处理工具包 -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>

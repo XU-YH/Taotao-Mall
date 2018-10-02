@@ -1,4 +1,4 @@
-package com.taotao.web.service;
+package com.taotao.common.service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -23,7 +23,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.taotao.web.httpclient.HttpResult;
+import com.taotao.common.httpclient.HttpResult;
 
 @Service
 public class ApiService implements BeanFactoryAware {
@@ -31,7 +31,7 @@ public class ApiService implements BeanFactoryAware {
 	// @Autowired
 	// private CloseableHttpClient httpclient;
 
-	@Autowired
+	@Autowired(required = false)
 	private RequestConfig requestConfig;
 
 	private BeanFactory beanFactory;
@@ -129,9 +129,11 @@ public class ApiService implements BeanFactoryAware {
 	 * 
 	 * @param url
 	 * @return
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
 	 */
-	public HttpResult doPost(String url) {
-		return this.doPost(url);
+	public HttpResult doPost(String url) throws ClientProtocolException, IOException {
+		return this.doPost(url, null);
 	}
 
 	private CloseableHttpClient getHttpclient() {

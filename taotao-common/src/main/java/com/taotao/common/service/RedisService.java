@@ -66,12 +66,12 @@ public class RedisService {
 	 * @param key
 	 * @return
 	 */
-	public Long del(String key) {
+	public Long del(final String key) {
 		return this.excute(new Function<Long, ShardedJedis>() {
 
 			@Override
 			public Long callback(ShardedJedis e) {
-				return e.decr(key);
+				return e.del(key);
 			}
 		});
 	}
